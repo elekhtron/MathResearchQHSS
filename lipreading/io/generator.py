@@ -19,7 +19,7 @@ class FrameGenerator(BaseGenerator):
     shuffle: boolean on whether or not you want to shuffle the dataset
     '''
     def __init__(self, list_IDs, data_dirs, batch_size, absolute_max_string_len = 32, 
-                 output_size = 28, resize_shape = (75,192, 240, 3), shuffle = True):
+                 output_size = 28, resize_shape = (75, 100, 50, 3), shuffle = True):
         # lists of paths to images
         self.list_IDs = list_IDs
         self.data_dirs = data_dirs # [s1_path, s1_align_paths]
@@ -39,19 +39,25 @@ class FrameGenerator(BaseGenerator):
             x, y
         '''
         import skvideo.io
+        import cv2
         x = []
         y = []
         label_length = []
         input_length = []
         for file_id in list_IDs_temp:
             # for file_x, file_y in zip(batch_x, batch_y):
-            file_x = os.path.join(self.data_dirs[0] + file_id + '.mpg')
+            folder_x = os.path.join(self.data_dirs[0] + file_id) #+ '.mpg')
             file_y = self.align[file_id]#os.path.join(self.data_dirs[1] + file_id + '.align')
             
             # assume 4d
-            load_data = np.asarray(skvideo.io.vread(file_x))
-            old = load_data.shape
-            video = np.asarray([resize(load_data[i], self.resize_shape[-3:]) for i in range(old[0])])
+
+            video = np.array([cv2.imread(img).transpose(1, 0, 2) for img in sorted(os.listdir(folder_x))]
+
+            # load_data = np.asarray(skvideo.io.vread(file_x))
+            # old = load_data.shape
+            # video = np.asarray([resize(load_data[i], self.resize_shape[-3:]) for i in range(old[0])])
+
+
             if video.shape[0] < self.resize_shape[0]:
                 # assumes the resize_shape is the max
                 difference = self.resize_shape[0] - video.shape[0]
