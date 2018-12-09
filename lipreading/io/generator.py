@@ -46,6 +46,7 @@ class FrameGenerator(BaseGenerator):
         input_length = []
         for file_id in list_IDs_temp:
             # for file_x, file_y in zip(batch_x, batch_y):
+            print(file_id)
             folder_x = os.path.join(self.data_dirs[0] + file_id) #+ '.mpg')
             file_y = self.align[file_id]#os.path.join(self.data_dirs[1] + file_id + '.align')
             
