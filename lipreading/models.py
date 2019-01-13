@@ -57,7 +57,7 @@ class LipNet(object):
 
         self.loss_out = CTC('ctc', [self.y_pred, self.labels, self.input_length, self.label_length])
 
-        self.model = Model(inputs=[self.input_data, self.labels, self.input_length, self.label_length], outputs=self.loss_out)
+        self.model = Model(inputs=[self.input_data, self.labels, self.input_length, self.label_length], outputs=[self.loss_out, self.y_pred])
 
     def summary(self):
         Model(inputs=self.input_data, outputs=self.y_pred).summary()
